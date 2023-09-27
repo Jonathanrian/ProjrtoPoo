@@ -54,6 +54,23 @@ public class Usuario {
         this.senha = senha;
     }
 
-    
+    public boolean Login(String usuario, String senha){
+        if(this.usuario == usuario && this.senha == senha){
+            return true;            
+        }else{
+            return false;
+        }
+    }
+
+    public boolean RecuperarSenha(String usuario, String novaSenha){
+        if(this.usuario == usuario){
+            System.out.println("A nova senha foi alterada com sucesso");
+            senha = novaSenha;
+            return true;
+        }else{
+            System.out.println("Usuario não cadastrado");
+            return false;
+        }
+    }
 
 }   
