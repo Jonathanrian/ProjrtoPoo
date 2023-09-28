@@ -133,7 +133,7 @@ public class Usuario {
 
 
         // método para realizar o login do usuario consultando o banco de dados
-        public boolean Login(String usuario, String senha){
+        public static boolean Login(String usuario, String senha){
             //tenta realizar a consexão 
             try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
@@ -265,5 +265,33 @@ public class Usuario {
             return false;
         }
     }
+
+    public boolean ExcluirUsuario(String usuario) {
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
+
+            String sql = "DELETE FROM usuario WHERE usuario = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, usuario);
+
+            int rowsDeleted = stmt.executeUpdate();
+            stmt.close();
+            connection.close();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Usuário excluído com sucesso");
+                return true;
+            } else {
+                System.out.println("Usuário não encontrado");
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Falha ao excluir usuário");
+            return false;
+        }
+    }
+
+
 }
 
