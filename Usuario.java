@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Usuario {
@@ -60,13 +61,38 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public boolean Login(String usuario, String senha){
-        if(this.usuario == usuario && this.senha == senha){
-            return true;            
-        }else{
+    // public boolean Login(String usuario, String senha){
+    //     if(this.usuario == usuario && this.senha == senha){
+    //         return true;            
+    //     }else{
+    //         return false;
+    //     }
+    // }
+
+        public boolean Login( String usuario, String senha){
+            try {
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
+
+            String query = "SELECT * FROM usuario WHERE usuario = ? AND senha = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, usuario);
+            statement.setString(2, senha);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            boolean sucesso = resultSet.next();
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+            return sucesso;
+        } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
-    }
+        }
+
 
     public boolean RecuperarSenha(String nomeUsuario, String novaSenha){
         try {
@@ -93,8 +119,6 @@ public class Usuario {
             }
 
             
-            
-
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -105,7 +129,6 @@ public class Usuario {
     public boolean Cadastrar(String nome, String email, String cpf, String telefone, String usuario, String senha, String endereco, String data_nasc){
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
-            System.out.println("Conexão bem sucedida!");
 
             String sql = "INSERT INTO usuario (nome_completo, email, cpf, telefone, usuario, senha, endereco, data_nasc) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -121,9 +144,11 @@ public class Usuario {
 
             stmt.close();
             connection.close();
+            System.out.println("Usuario cadastrado com sucesso");
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("Falha ao cadastrar usuario");
             return false;
         }
     }
