@@ -206,7 +206,19 @@ public class Usuario {
             stmt.setString(5, usuario);
             stmt.setString(6, senha);
             stmt.setString(7, endereco);
-            stmt.setString(8, data_nasc);
+
+            try {
+                // Convert string to Date
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                java.util.Date date = sdf.parse(data_nasc);
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+    
+                stmt.setDate(8, sqlDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                System.out.println("Falha ao converter data");
+                return false;
+            }
             stmt.executeUpdate();
 
             stmt.close();
