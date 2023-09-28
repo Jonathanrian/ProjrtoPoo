@@ -75,52 +75,52 @@ public class Usuario {
     }
 
 
-    public static boolean validarDados(String nomeCompleto, String email, String cpf,
+    public static boolean ValidarDados(String nomeCompleto, String email, String cpf,
                                              String telefone, String usuario, String senha,
                                              String endereco, String dataNasc) {
-        return validarNomeCompleto(nomeCompleto) &&
-                validarEmail(email) &&
-                validarCPF(cpf) &&
-                validarTelefone(telefone) &&
-                validarUsuario(usuario) &&
-                validarSenha(senha) &&
-                validarEndereco(endereco) &&
-                validardataNasc(dataNasc);
+        return ValidarNomeCompleto(nomeCompleto) &&
+                ValidarEmail(email) &&
+                ValidarCPF(cpf) &&
+                ValidarTelefone(telefone) &&
+                ValidarUsuario(usuario) &&
+                ValidarSenha(senha) &&
+                ValidarEndereco(endereco) &&
+                ValidardataNasc(dataNasc);
     }
 
-    public static boolean validarNomeCompleto(String nomeCompleto) {
+    public static boolean ValidarNomeCompleto(String nomeCompleto) {
         return nomeCompleto.matches("[a-zA-Z\\s]+");
     }
 
-    public static boolean validarEmail(String email) {
+    public static boolean ValidarEmail(String email) {
         String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
 
-    public static boolean validarCPF(String cpf) {
+    public static boolean ValidarCPF(String cpf) {
         return cpf.matches("\\d{11}");
     }
 
-    public static boolean validarTelefone(String telefone) {
+    public static boolean ValidarTelefone(String telefone) {
         return telefone.matches("\\d{8,11}");
     }
 
-    public static boolean validarUsuario(String usuario) {
+    public static boolean ValidarUsuario(String usuario) {
         return usuario.matches("[a-zA-Z0-9]+");
     }
 
-    public static boolean validarSenha(String senha) {
+    public static boolean ValidarSenha(String senha) {
         return senha.length() >= 8;
     }
 
-    public static boolean validarEndereco(String endereco) {
+    public static boolean ValidarEndereco(String endereco) {
         return !endereco.isEmpty();
     }
 
     @SuppressWarnings("unused")
-    public static boolean validardataNasc(String dataNasc) {
+    public static boolean ValidardataNasc(String dataNasc) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateFormat.setLenient(false);
         try {
@@ -216,6 +216,40 @@ public class Usuario {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Falha ao cadastrar usuario");
+            return false;
+        }
+    }
+
+    public boolean EditarInformacoes(String usuario, String novoNome, String novoEmail, String novoCpf, String novoTelefone, String novoUsuario, String novaSenha, String novoEndereco, String novaDataNasc){
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
+
+            String query = "UPDATE usuario SET nome_completo = ?, email = ?, telefone = ?, cpf = ?, usuario = ?, senha = ?, endereco = ?, data_nasc = ? WHERE usuario = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, novoNome);
+            statement.setString(2, novoEmail);
+            statement.setString(3, novoTelefone);
+            statement.setString(4, novoCpf);
+            statement.setString(5, novoUsuario);
+            statement.setString(6, novaSenha);
+            statement.setString(7, novoEndereco);
+            statement.setString(8, novaDataNasc);
+            statement.setString(9, usuario);
+
+            int linhasAfetadas = statement.executeUpdate();
+
+            statement.close();
+            connection.close();
+
+            if (linhasAfetadas > 0) {
+                System.out.println("Informações atualizadas com sucesso.");
+                return true;
+            } else {
+                System.out.println("Nenhum usuário encontrado com o usuario fornecido.");
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
