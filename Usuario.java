@@ -1,4 +1,10 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class Usuario {
+
     private String nomeCompleto;
     private String cpf;
     private String email;
@@ -73,6 +79,31 @@ public class Usuario {
         }
     }
 
-    
 
-}   
+    public boolean Cadastrar(String nome, String email, String cpf, String telefone, String usuario, String senha, String endereco, String data_nasc){
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
+            System.out.println("Conexão bem sucedida!");
+
+            String sql = "INSERT INTO usuario (nome_completo, email, cpf, telefone, usuario, senha, endereco, data_nasc) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, nome);
+            stmt.setString(2, email);
+            stmt.setString(3, cpf);
+            stmt.setString(4, telefone);
+            stmt.setString(5, usuario);
+            stmt.setString(6, senha);
+            stmt.setString(7, endereco);
+            stmt.setString(8, data_nasc);
+            stmt.executeUpdate();
+
+            stmt.close();
+            connection.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    }
+
