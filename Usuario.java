@@ -68,13 +68,35 @@ public class Usuario {
         }
     }
 
-    public boolean RecuperarSenha(String usuario, String novaSenha){
-        if(this.usuario == usuario){
-            System.out.println("A nova senha foi alterada com sucesso");
-            senha = novaSenha;
-            return true;
-        }else{
-            System.out.println("Usuario não cadastrado");
+    public boolean RecuperarSenha(String nomeUsuario, String novaSenha){
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
+
+            String sql = "UPDATE usuario SET senha = ? WHERE usuario = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, novaSenha);
+            stmt.setString(2, nomeUsuario);
+            
+
+            int rowsUpdated = stmt.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Senha alterada com sucesso!");
+                connection.close();
+                stmt.close();
+                return true;
+            } else {
+                System.out.println("Usuário não encontrado.");
+                connection.close();
+                stmt.close();
+                return false;
+            }
+
+            
+            
+
+        } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
