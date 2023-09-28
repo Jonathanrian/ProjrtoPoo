@@ -3,6 +3,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.Date;
 
 public class Usuario {
 
@@ -13,15 +18,23 @@ public class Usuario {
     private String usuario;
     private String senha;
     //private Endereco endereco;
-    //private Date dataNasc;
+    private Date dataNasc;
 
-    public Usuario(String nomeCompleto, String cpf, String email, String telefone, String usuario, String senha) {
+    public Usuario(String nomeCompleto, String cpf, String email, String telefone, String usuario, String senha, Date dataNasc) {
         this.nomeCompleto = nomeCompleto;
         this.cpf = cpf;
         this.email = email;
         this.telefone = telefone;
         this.usuario = usuario;
         this.senha = senha;
+        this.dataNasc = dataNasc;
+    }
+
+    public Date getDataNasc() {
+        return dataNasc;
+    }
+    public void setDataNasc(Date dataNasc) {
+        this.dataNasc = dataNasc;
     }
 
     public String getNomeCompleto() {
@@ -61,18 +74,72 @@ public class Usuario {
         this.senha = senha;
     }
 
-    // public boolean Login(String usuario, String senha){
-    //     if(this.usuario == usuario && this.senha == senha){
-    //         return true;            
-    //     }else{
-    //         return false;
-    //     }
-    // }
 
-        public boolean Login( String usuario, String senha){
+    public static boolean validarDados(String nomeCompleto, String email, String cpf,
+                                             String telefone, String usuario, String senha,
+                                             String endereco, String dataNasc) {
+        return validarNomeCompleto(nomeCompleto) &&
+                validarEmail(email) &&
+                validarCPF(cpf) &&
+                validarTelefone(telefone) &&
+                validarUsuario(usuario) &&
+                validarSenha(senha) &&
+                validarEndereco(endereco) &&
+                validardataNasc(dataNasc);
+    }
+
+    public static boolean validarNomeCompleto(String nomeCompleto) {
+        return nomeCompleto.matches("[a-zA-Z\\s]+");
+    }
+
+    public static boolean validarEmail(String email) {
+        String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    public static boolean validarCPF(String cpf) {
+        return cpf.matches("\\d{11}");
+    }
+
+    public static boolean validarTelefone(String telefone) {
+        return telefone.matches("\\d{8,11}");
+    }
+
+    public static boolean validarUsuario(String usuario) {
+        return usuario.matches("[a-zA-Z0-9]+");
+    }
+
+    public static boolean validarSenha(String senha) {
+        return senha.length() >= 8;
+    }
+
+    public static boolean validarEndereco(String endereco) {
+        return !endereco.isEmpty();
+    }
+
+    @SuppressWarnings("unused")
+    public static boolean validardataNasc(String dataNasc) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateFormat.setLenient(false);
+        try {
+            Date data = dateFormat.parse(dataNasc);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+
+        // método para realizar o login do usuario consultando o banco de dados
+        public boolean Login(String usuario, String senha){
+            //tenta realizar a consexão 
             try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
 
+            //pesquisa no banco na tabela usuario e pela coluna usuario se 
+            // há um usuario que faça um match com o usuario e senha contidos dentro do banco
             String query = "SELECT * FROM usuario WHERE usuario = ? AND senha = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, usuario);
@@ -87,10 +154,10 @@ public class Usuario {
             connection.close();
 
             return sucesso;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
 
 
@@ -152,5 +219,5 @@ public class Usuario {
             return false;
         }
     }
-    }
+}
 
