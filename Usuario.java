@@ -10,31 +10,42 @@ import java.util.regex.Pattern;
 import java.util.Date;
 
 public class Usuario {
-
+    
+    // encapsulamento dos atributos
     private String nomeCompleto;
     private String cpf;
     private String email;
     private String telefone;
     private String usuario;
     private String senha;
-    //private Endereco endereco;
+    private String endereco;
     private Date dataNasc;
 
-    public Usuario(String nomeCompleto, String cpf, String email, String telefone, String usuario, String senha, Date dataNasc) {
+    // construtor da classe Usuario
+    public Usuario(String nomeCompleto, String cpf, String email, String telefone, String usuario, String senha, String endereco, Date dataNasc) {
         this.nomeCompleto = nomeCompleto;
         this.cpf = cpf;
         this.email = email;
         this.telefone = telefone;
         this.usuario = usuario;
         this.senha = senha;
+        this.endereco = endereco;
         this.dataNasc = dataNasc;
     }
 
+    // gets e sets para fazer o acesso dos atributos dos quais foram encapsulados
     public Date getDataNasc() {
         return dataNasc;
     }
     public void setDataNasc(Date dataNasc) {
         this.dataNasc = dataNasc;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
     public String getNomeCompleto() {
@@ -74,7 +85,8 @@ public class Usuario {
         this.senha = senha;
     }
 
-
+    // método para fazer a verificação dos dados inseridos pelo usuario antes de se 
+    // colocar no banco de dados
     public static boolean ValidarDados(String nomeCompleto, String email, String cpf,
                                              String telefone, String usuario, String senha,
                                              String endereco, String dataNasc) {
@@ -88,6 +100,8 @@ public class Usuario {
                 ValidardataNasc(dataNasc);
     }
 
+    // em todos os métodos dos quais retorna um boolean para o ValidarDados()
+    // foi utilizado regex para fazer a verificação dos caracteres inseridos
     public static boolean ValidarNomeCompleto(String nomeCompleto) {
         return nomeCompleto.matches("[a-zA-Z\\s]+");
     }
@@ -134,18 +148,18 @@ public class Usuario {
 
         // método para realizar o login do usuario consultando o banco de dados
         public static boolean Login(String usuario, String senha){
-            //tenta realizar a consexão 
+            //tenta realizar a conexão com o banco
             try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
 
-            //pesquisa no banco na tabela usuario e pela coluna usuario se 
+            //pesquisa na tabela usuario e pela coluna usuario se 
             // há um usuario que faça um match com o usuario e senha contidos dentro do banco
-            String query = "SELECT * FROM usuario WHERE usuario = ? AND senha = ?";
+            String query = "SELECT * FROM usuario WHERE usuario = ? AND senha = ?"; //consulta o banco
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, usuario);
-            statement.setString(2, senha);
+            statement.setString(2, senha); // inserindo as informações na consulta nos ?
 
-            ResultSet resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery(); // executando a consulta
 
             boolean sucesso = resultSet.next();
 
@@ -160,9 +174,10 @@ public class Usuario {
             }
         }
 
-
+        // método para recuperar a senha
     public boolean RecuperarSenha(String nomeUsuario, String novaSenha){
         try {
+            // conectando com o banco de dados
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
 
             String sql = "UPDATE usuario SET senha = ? WHERE usuario = ?";
@@ -173,6 +188,8 @@ public class Usuario {
 
             int rowsUpdated = stmt.executeUpdate();
 
+            // verifica se alguma linha foi alterada, para verificar se a alteração
+            // foi feita com sucesso
             if (rowsUpdated > 0) {
                 System.out.println("Senha alterada com sucesso!");
                 connection.close();
@@ -208,7 +225,7 @@ public class Usuario {
             stmt.setString(7, endereco);
 
             try {
-                // Convert string to Date
+                // Fazendo a conversão do tipo String para Date, para inserir no banco de dados
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 java.util.Date date = sdf.parse(data_nasc);
                 java.sql.Date sqlDate = new java.sql.Date(date.getTime());
