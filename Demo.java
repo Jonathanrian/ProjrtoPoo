@@ -1,8 +1,8 @@
 
 public class Demo {
    public static void main(String args[]) {
-      Usuario usuario = new Usuario(null, null, null, null, null, null, null, null);
-      
+      //Usuario usuario = new Usuario(null, null, null, null, null, null, null, null);
+      Produto produto = new Produto(null, 0, null, false, null, null, 0);
       //System.out.println(usuario.Cadastrar("robertinho delas", "carlim@gmail.com", "1234123123", "9090", "roberts", "123", "rua sem saida", "teste"));
       //System.out.println(usuario.RecuperarSenha("roberts", "456"));
       //System.out.println(usuario.Login("roberts", "456"));
@@ -24,10 +24,14 @@ public class Demo {
       //    System.out.println("Alguns dados estão inválidos :(");
       // }
 
-      usuario.ExcluirUsuario("gelado123");
+      //usuario.ExcluirUsuario("gelado123");
 
       //usuario.EditarInformacoes("teste", "sucessao de sucessos", email, cpf, telefone, "gelado", senha, endereco, dataNascimento);
 
+      String nome = "teste";
+      double preco = 30.00;
+
+      produto.cadastrarProduto(nome, preco);
    }      
       
 }
