@@ -70,16 +70,19 @@ public class Produto {
 
 
 
-    public boolean cadastrarProduto(String nome, double preco) {
+    public boolean cadastrarProduto(String nome, double preco, String categoria, String descricao, String fabricante) {
 
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/produto", "postgres", "123");
 
-            String sql = "INSERT INTO produto (nome, preco) VALUES (?, ?)";
+            String sql = "INSERT INTO produtos (nome_produto, preco, categoria, descricao, fabricante) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, nome);
             statement.setDouble(2, preco);
+            statement.setString(3, categoria);
+            statement.setString(4, descricao);
+            statement.setString(5, fabricante);
 
             statement.executeUpdate();
 
@@ -96,7 +99,7 @@ public class Produto {
         try {
 
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/produto", "postgres", "123");
-            String sql = "UPDATE produtos SET preco = ? WHERE nome = ?";
+            String sql = "UPDATE produtos SET preco = ? WHERE nome_produto = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setDouble(1, novoPreco);
