@@ -11,7 +11,6 @@ public class Produto {
     private String descricao;
     private String fabricante;
     private double desconto;
-    //private Imagem imagem;
 
     public Produto(String nome, double preco, String categoria, boolean emEstoque, String descricao, String fabricante,
             float desconto) {

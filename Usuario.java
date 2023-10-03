@@ -87,54 +87,54 @@ public class Usuario {
 
     // método para fazer a verificação dos dados inseridos pelo usuario antes de se 
     // colocar no banco de dados
-    public static boolean ValidarDados(String nomeCompleto, String email, String cpf,
+    public static boolean validarDados(String nomeCompleto, String email, String cpf,
                                              String telefone, String usuario, String senha,
                                              String endereco, String dataNasc) {
-        return ValidarNomeCompleto(nomeCompleto) &&
-                ValidarEmail(email) &&
-                ValidarCPF(cpf) &&
-                ValidarTelefone(telefone) &&
-                ValidarUsuario(usuario) &&
-                ValidarSenha(senha) &&
-                ValidarEndereco(endereco) &&
-                ValidardataNasc(dataNasc);
+        return validarNomeCompleto(nomeCompleto) &&
+                validarEmail(email) &&
+                validarCPF(cpf) &&
+                validarTelefone(telefone) &&
+                validarUsuario(usuario) &&
+                validarSenha(senha) &&
+                validarEndereco(endereco) &&
+                validardataNasc(dataNasc);
     }
 
     // em todos os métodos dos quais retorna um boolean para o ValidarDados()
     // foi utilizado regex para fazer a verificação dos caracteres inseridos
-    public static boolean ValidarNomeCompleto(String nomeCompleto) {
+    public static boolean validarNomeCompleto(String nomeCompleto) {
         return nomeCompleto.matches("[a-zA-Z\\s]+");
     }
 
-    public static boolean ValidarEmail(String email) {
+    public static boolean validarEmail(String email) {
         String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
 
-    public static boolean ValidarCPF(String cpf) {
+    public static boolean validarCPF(String cpf) {
         return cpf.matches("\\d{11}");
     }
 
-    public static boolean ValidarTelefone(String telefone) {
+    public static boolean validarTelefone(String telefone) {
         return telefone.matches("\\d{8,11}");
     }
 
-    public static boolean ValidarUsuario(String usuario) {
+    public static boolean validarUsuario(String usuario) {
         return usuario.matches("[a-zA-Z0-9]+");
     }
 
-    public static boolean ValidarSenha(String senha) {
+    public static boolean validarSenha(String senha) {
         return senha.length() >= 8;
     }
 
-    public static boolean ValidarEndereco(String endereco) {
+    public static boolean validarEndereco(String endereco) {
         return !endereco.isEmpty();
     }
 
     @SuppressWarnings("unused")
-    public static boolean ValidardataNasc(String dataNasc) {
+    public static boolean validardataNasc(String dataNasc) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateFormat.setLenient(false);
         try {
@@ -147,7 +147,7 @@ public class Usuario {
 
 
         // método para realizar o login do usuario consultando o banco de dados
-        public static boolean Login(String usuario, String senha){
+        public static boolean login(String usuario, String senha){
             //tenta realizar a conexão com o banco
             try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
@@ -175,7 +175,7 @@ public class Usuario {
         }
 
         // método para recuperar a senha
-    public boolean RecuperarSenha(String nomeUsuario, String novaSenha){
+    public boolean recuperarSenha(String nomeUsuario, String novaSenha){
         try {
             // conectando com o banco de dados
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
@@ -210,7 +210,7 @@ public class Usuario {
     }
 
 
-    public boolean Cadastrar(String nome, String email, String cpf, String telefone, String usuario, String senha, String endereco, String data_nasc){
+    public boolean cadastrar(String nome, String email, String cpf, String telefone, String usuario, String senha, String endereco, String data_nasc){
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
 
@@ -249,7 +249,7 @@ public class Usuario {
         }
     }
 
-    public boolean EditarInformacoes(String usuario, String novoNome, String novoEmail, String novoCpf, String novoTelefone, String novoUsuario, String novaSenha, String novoEndereco, String novaDataNasc){
+    public boolean editarInformacoes(String usuario, String novoNome, String novoEmail, String novoCpf, String novoTelefone, String novoUsuario, String novaSenha, String novoEndereco, String novaDataNasc){
         try{
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
 
@@ -283,7 +283,7 @@ public class Usuario {
         }
     }
 
-    public boolean ExcluirUsuario(String usuario) {
+    public boolean excluirUsuario(String usuario) {
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/usuario", "postgres", "123");
 
