@@ -1,19 +1,25 @@
+import java.util.Date;
+
+
 public class Pedido {
     private int numPedido;
     //private list <Pedido> produtosCarrinho;
     private String status;
     private Usuario usuario;
-    //private Date dataCriacao;
+    private Date dataCriacao;
     private float valorTotal;
     private String formaPagamento;
-    //private Endereco endereco;
+    private String endereco;
 
-    public Pedido(int numPedido, String status, Usuario usuario, float valorTotal, String formaPagamento) {
+
+    public Pedido(int numPedido, String status, Usuario usuario, Date dataCriacao, float valorTotal, String formaPagamento, String endereco) {
         this.numPedido = numPedido;
         this.status = status;
         this.usuario = usuario;
+        this.dataCriacao = dataCriacao;
         this.valorTotal = valorTotal;
         this.formaPagamento = formaPagamento;
+        this.endereco = endereco;
     }
 
 
@@ -35,6 +41,12 @@ public class Pedido {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+    public Date getDataCriacao() {
+        return dataCriacao;
+    }
+    public void setDataCriacao(Date dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
     public float getValorTotal() {
         return valorTotal;
     }
@@ -47,7 +59,15 @@ public class Pedido {
     public void setFormaPagamento(String formaPagamento) {
         this.formaPagamento = formaPagamento;
     }
+    public String getEndereco() {
+        return endereco;
+    }
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
 
+    
+    
     
 
 

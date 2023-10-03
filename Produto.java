@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Produto {
@@ -141,4 +142,30 @@ public class Produto {
         }
     }
 
+    public static boolean exibirDetalhes() {
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/produto", "postgres", "123");
+
+            String sql = "SELECT * FROM produtos";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                String nome_produto = resultSet.getString("nome_produto");
+                double preco = resultSet.getDouble("preco");
+
+                System.out.println("Nome do Produto: " + nome_produto + ", Preço: " + preco);
+            }
+
+            resultSet.close();
+            stmt.close();
+            connection.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Falha ao mostrar produtos");
+            return false;
+        }
+    }
 }
