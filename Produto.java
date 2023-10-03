@@ -116,4 +116,30 @@ public class Produto {
         }
     }
     
+    public boolean ExcluirProduto(String nome_produto) {
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/produto", "postgres", "123");
+
+            String sql = "DELETE FROM produtos WHERE nome_produto = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, nome_produto);
+
+            int rowsDeleted = stmt.executeUpdate();
+            stmt.close();
+            connection.close();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Produto excluído com sucesso");
+                return true;
+            } else {
+                System.out.println("Produto não encontrado");
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Falha ao excluir Produto");
+            return false;
+        }
+    }
+
 }

@@ -28,17 +28,18 @@ public class Demo {
 
       //usuario.EditarInformacoes("teste", "sucessao de sucessos", email, cpf, telefone, "gelado", senha, endereco, dataNascimento);
 
-      String nome = "teste";
+       String nome = "teste";
       // double preco = 30.12;
       // String categoria = "categorica";
       // String descricao = "descritiva";
       // String fabricante = "fabricado";
-      double novoPreco = 35.50;
+      // double novoPreco = 35.50;
 
       //produto.cadastrarProduto(nome, preco, categoria, descricao, fabricante);
       
-      produto.atualizarPrecoProduto(nome, novoPreco);
+      //produto.atualizarPrecoProduto(nome, novoPreco);
 
+      produto.ExcluirProduto(nome);
    }      
       
 }
