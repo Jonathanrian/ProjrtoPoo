@@ -2,7 +2,7 @@ public class ItemPedido {
     private int idProduto;
     private String nomeProduto;
     private double preco;
-    private int quantidade;
+    private static int quantidade;
 
 
     public ItemPedido(int idProduto, String nomeProduto, double preco, int quantidade) {
@@ -24,9 +24,10 @@ public class ItemPedido {
         return preco;
     }
 
-    public int getQuantidade() {
+    public static int getQuantidade() {
         return quantidade;
     }
+
 
     @Override
     public String toString() {

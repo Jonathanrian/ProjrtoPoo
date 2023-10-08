@@ -122,7 +122,7 @@ public class Pedido {
     private void calcularTotalDoPedido() {
         float total = 0;
         for (ItemPedido item : itens) {
-            total += item.getPreco();
+            total += item.getPreco() * ItemPedido.getQuantidade();
         }
         valorTotal = total;
         System.out.println("Total do Pedido: R$" + total);
